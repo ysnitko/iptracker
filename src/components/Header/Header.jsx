@@ -1,10 +1,10 @@
-import React, { useRef, useState } from "react";
-import Infobar from "../InfoBar/Infobar";
-import arrow from "../../assets/images/icon-arrow.svg";
+import React, { useRef, useState } from 'react';
+import Infobar from '../InfoBar/Infobar';
+import arrow from '../../assets/images/icon-arrow.svg';
 
 const Header = () => {
-  const [info, setinfo] = useState({});
-  const ipAdressRef = useRef("");
+  const [info, setInfo] = useState({});
+  const ipAdressRef = useRef('');
 
   const searchInfo = async () => {
     const res = await fetch(
@@ -17,7 +17,7 @@ const Header = () => {
   const onSubmitForm = async (event) => {
     event.preventDefault();
     const getData = await searchInfo();
-    setinfo(getData);
+    setInfo(getData);
     console.log(info);
   };
 
