@@ -2,8 +2,9 @@ import React, { useRef, useState } from 'react';
 import Infobar from '../InfoBar/Infobar';
 import arrow from '../../assets/images/icon-arrow.svg';
 
-const Header = () => {
+const Header = ({ setPosition, position }) => {
   const [info, setInfo] = useState({});
+
   const ipAdressRef = useRef('');
 
   const searchInfo = async () => {
@@ -14,11 +15,24 @@ const Header = () => {
     return data;
   };
 
+  const searchCoordinates = async (region) => {
+    const res = await fetch(
+      `http://api.positionstack.com/v1/forward?access_key=4fef2a2546a691d417d1b443c7a4d405&query=${region}`
+    );
+    const data = await res.json();
+    console.log(data);
+    return data;
+  };
+
   const onSubmitForm = async (event) => {
     event.preventDefault();
     const getData = await searchInfo();
     setInfo(getData);
     console.log(info);
+    const getCoordinates = await searchCoordinates(info.location?.region);
+    console.log(getCoordinates);
+    // setPosition({ lat: getCoordinates.lat, lng: getCoordinates.lng });
+    // console.log(position);
   };
 
   return (

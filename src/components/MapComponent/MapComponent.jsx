@@ -1,19 +1,13 @@
-import React, { useState } from "react";
-import LocationMarker from "../LocationMarker/LocationMarker";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import React from 'react';
+import LocationMarker from '../LocationMarker/LocationMarker';
+import { MapContainer, TileLayer } from 'react-leaflet';
 
-const MapComponent = () => {
-  // const [mapSettings, setMapSettings] = useState({
-  //   lat: 55.405345,
-  //   lng: 23.530685,
-  //   zoom: 10,
-  // });
-  let center = [23.530685, 55.405345];
+const MapComponent = ({ position, setPosition }) => {
   return (
     <MapContainer
       className="h-dvh w-full z-0"
       zoom={10}
-      center={center}
+      center={position}
       scrollWheelZoom={false}
     >
       <TileLayer
@@ -25,7 +19,7 @@ const MapComponent = () => {
           A pretty CSS3 popup. <br /> Easily customizable.
         </Popup>
       </Marker> */}
-      <LocationMarker />
+      <LocationMarker position={position} setPosition={setPosition} />
     </MapContainer>
   );
 };
