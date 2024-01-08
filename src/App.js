@@ -1,6 +1,6 @@
-import React from 'react';
-import Header from './components/Header/Header';
-import MapComponent from './components/MapComponent/MapComponent';
+import React from "react";
+import Header from "./components/Header/Header";
+import MapComponent from "./components/MapComponent/MapComponent";
 
 function App() {
   return (
