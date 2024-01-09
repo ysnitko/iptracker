@@ -11,6 +11,7 @@ const MapComponent = () => {
   );
   const dispatch = useDispatch();
   const info = useSelector((store) => store.currentRegionReducer.info);
+
   useEffect(() => {
     fetch(
       `http://api.positionstack.com/v1/forward?access_key=4fef2a2546a691d417d1b443c7a4d405&query=${info.location?.region}`
