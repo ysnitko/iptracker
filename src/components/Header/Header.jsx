@@ -1,53 +1,73 @@
-import React, { useRef, useState } from 'react';
-import Infobar from '../InfoBar/Infobar';
-import arrow from '../../assets/images/icon-arrow.svg';
+import React, { useRef, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import Infobar from "../InfoBar/Infobar";
+import { setCurrenRegiontAC } from "../../redux/actions/currentRegionAC";
+import { currentCoordinatesAC } from "../../redux/actions/currentCoordinatesAC";
+import arrow from "../../assets/images/icon-arrow.svg";
 
-const Header = ({ setPosition, position }) => {
-  const [info, setInfo] = useState({});
-
-  const ipAdressRef = useRef('');
-
-  const searchInfo = async () => {
-    const res = await fetch(
-      `https://geo.ipify.org/api/v2/country?apiKey=at_0jU0rVtiKviW1hSgpjjuwVMfF660F&ipAddress=${ipAdressRef.current.value}`
-    );
-    const data = await res.json();
-    return data;
-  };
+const Header = () => {
+  const [empty, setEmpty] = useState(false);
+  const dispatch = useDispatch();
+  const info = useSelector((store) => store.currentRegionReducer.info);
+  const ipAdressRef = useRef("");
 
   const searchCoordinates = async (region) => {
     const res = await fetch(
       `http://api.positionstack.com/v1/forward?access_key=4fef2a2546a691d417d1b443c7a4d405&query=${region}`
     );
     const data = await res.json();
+    dispatch(
+      currentCoordinatesAC({
+        lat: data.data[0].latitude,
+        lng: data.data[0].longitude,
+      })
+    );
     console.log(data);
-    return data;
+  };
+
+  const searchInfo = async (address) => {
+    const res = await fetch(
+      `https://geo.ipify.org/api/v2/country?apiKey=at_0jU0rVtiKviW1hSgpjjuwVMfF660F&ipAddress=${address}`
+    );
+    const data = await res.json();
+    dispatch(setCurrenRegiontAC(data));
+    console.log(info);
+    searchCoordinates(info.location?.region);
   };
 
   const onSubmitForm = async (event) => {
     event.preventDefault();
-    const getData = await searchInfo();
-    setInfo(getData);
+    if (!ipAdressRef.current.value) {
+      setEmpty(true);
+      return;
+    } else {
+      setEmpty(false);
+    }
+    await searchInfo(ipAdressRef.current?.value);
     console.log(info);
-    const getCoordinates = await searchCoordinates(info.location?.region);
-    console.log(getCoordinates);
-    // setPosition({ lat: getCoordinates.lat, lng: getCoordinates.lng });
-    // console.log(position);
   };
 
   return (
-    <header className="relative h-[280px] w-full bg-header-pattern bg-no-repeat bg-cover flex flex-col">
-      <span className="m-6 text-white text-center text-3xl font-bold">
+    <header className="relative h-[280px] w-full bg-header-pattern bg-no-repeat bg-cover flex flex-col sm: bg-header-mob">
+      <span className="m-6 text-white text-center text-3xl font-semibold">
         IP Address Tracker
       </span>
-      <form action="" className="m-auto my-0 w-2/5" onSubmit={onSubmitForm}>
+      <form action="" className="m-auto my-0 w-2/5 sm: w-11/12" onSubmit={onSubmitForm}>
         <label htmlFor="search-request" className="w-full block flex">
           <input
             ref={ipAdressRef}
             id="search-request"
             type="text"
-            className="w-full rounded-l-2xl p-4 outline-none"
-            placeholder="Search for any IP Address or domain"
+            className={
+              empty
+                ? "w-full rounded-l-2xl p-4 px-8 outline-none text-lg font-bold text-text-info placeholder-red-400"
+                : "w-full rounded-l-2xl p-4 px-8 outline-none text-lg font-bold text-text-info"
+            }
+            placeholder={
+              empty
+                ? "Please enter IP Address"
+                : "Search for any IP Address or domain"
+            }
             required
           />
           <button
@@ -59,7 +79,7 @@ const Header = ({ setPosition, position }) => {
           </button>
         </label>
       </form>
-      <Infobar info={info} />
+      <Infobar />
     </header>
   );
 };

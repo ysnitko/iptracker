@@ -1,16 +1,11 @@
-import React from 'react';
-import { Marker, Popup, useMapEvents } from 'react-leaflet';
+import React from "react";
+import { useSelector } from "react-redux";
+import { Marker, Popup } from "react-leaflet";
 
-function LocationMarker({ position, setPosition }) {
-  const map = useMapEvents({
-    click() {
-      map.locate();
-    },
-    locationfound(e) {
-      setPosition(e.latlng);
-      map.flyTo(e.latlng, map.getZoom());
-    },
-  });
+function LocationMarker() {
+  const position = useSelector(
+    (store) => store?.currentCoordinatesReducer?.position
+  );
 
   return position === null ? null : (
     <Marker position={position}>
