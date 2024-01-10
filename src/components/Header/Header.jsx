@@ -1,38 +1,33 @@
-import React, { useRef, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import Infobar from "../InfoBar/Infobar";
-import { setCurrenRegiontAC } from "../../redux/actions/currentRegionAC";
-import { currentCoordinatesAC } from "../../redux/actions/currentCoordinatesAC";
-import arrow from "../../assets/images/icon-arrow.svg";
+import React, { useRef, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import Infobar from '../InfoBar/Infobar';
+import { setCurrenRegiontAC } from '../../redux/actions/currentRegionAC';
+import { currentCoordinatesAC } from '../../redux/actions/currentCoordinatesAC';
+import arrow from '../../assets/images/icon-arrow.svg';
+import ip_local from '../../getLocalIp';
 
 const Header = () => {
   const [empty, setEmpty] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const info = useSelector((store) => store.currentRegionReducer.info);
-  const ipAdressRef = useRef("");
+  const ipAdressRef = useRef('');
 
-  const searchCoordinates = async (region) => {
-    const res = await fetch(
-      `http://api.positionstack.com/v1/forward?access_key=4fef2a2546a691d417d1b443c7a4d405&query=${region}`
-    );
-    const data = await res.json();
-    dispatch(
-      currentCoordinatesAC({
-        lat: data.data[0].latitude,
-        lng: data.data[0].longitude,
-      })
-    );
-    console.log(data);
-  };
+  const localIp = ip_local();
+  console.log(localIp);
 
   const searchInfo = async (address) => {
     const res = await fetch(
-      `https://geo.ipify.org/api/v2/country?apiKey=at_0jU0rVtiKviW1hSgpjjuwVMfF660F&ipAddress=${address}`
+      `https://geo.ipify.org/api/v2/country,city?apiKey=at_0jU0rVtiKviW1hSgpjjuwVMfF660F&ipAddress=${address}`
     );
     const data = await res.json();
     dispatch(setCurrenRegiontAC(data));
-    console.log(info);
-    searchCoordinates(info.location?.region);
+    dispatch(
+      currentCoordinatesAC({
+        lat: data.location?.lat,
+        lng: data.location?.lng,
+      })
+    );
   };
 
   const onSubmitForm = async (event) => {
@@ -44,15 +39,20 @@ const Header = () => {
       setEmpty(false);
     }
     await searchInfo(ipAdressRef.current?.value);
+    setIsLoading(true);
     console.log(info);
   };
 
   return (
-    <header className="relative h-[280px] w-full bg-header-pattern bg-no-repeat bg-cover flex flex-col sm: bg-header-mob">
-      <span className="m-6 text-white text-center text-3xl font-semibold">
+    <header className="relative min-h-[280px] w-full max-[640px]:bg-header-mob bg-header-pattern bg-no-repeat bg-cover flex flex-col">
+      <span className="m-6 text-white text-center text-3xl max-[640px]:text-2xl font-semibold">
         IP Address Tracker
       </span>
-      <form action="" className="m-auto my-0 w-2/5 sm: w-11/12" onSubmit={onSubmitForm}>
+      <form
+        action=""
+        className="m-auto my-0 w-2/5 max-[640px]:w-3/4"
+        onSubmit={onSubmitForm}
+      >
         <label htmlFor="search-request" className="w-full block flex">
           <input
             ref={ipAdressRef}
@@ -60,13 +60,13 @@ const Header = () => {
             type="text"
             className={
               empty
-                ? "w-full rounded-l-2xl p-4 px-8 outline-none text-lg font-bold text-text-info placeholder-red-400"
-                : "w-full rounded-l-2xl p-4 px-8 outline-none text-lg font-bold text-text-info"
+                ? 'w-full rounded-l-2xl p-4 px-8 outline-none text-lg font-bold text-text-info placeholder-red-400'
+                : 'w-full rounded-l-2xl p-4 px-8 outline-none text-lg font-bold text-text-info'
             }
             placeholder={
               empty
-                ? "Please enter IP Address"
-                : "Search for any IP Address or domain"
+                ? 'Please enter IP Address'
+                : 'Search for any IP Address or domain'
             }
             required
           />
@@ -79,7 +79,7 @@ const Header = () => {
           </button>
         </label>
       </form>
-      <Infobar />
+      <Infobar isLoading={isLoading} />
     </header>
   );
 };

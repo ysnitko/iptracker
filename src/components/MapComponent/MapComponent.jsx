@@ -12,20 +12,14 @@ const MapComponent = () => {
   const dispatch = useDispatch();
   const info = useSelector((store) => store.currentRegionReducer.info);
 
-  useEffect(() => {
-    fetch(
-      `http://api.positionstack.com/v1/forward?access_key=4fef2a2546a691d417d1b443c7a4d405&query=${info.location?.region}`
-    )
-      .then((res) => res.json())
-      .then((data) =>
-        dispatch(
-          currentCoordinatesAC({
-            lat: data.data[0].latitude,
-            lng: data.data[0].longitude,
-          })
-        )
-      );
-  }, [dispatch, info.location?.region]);
+  // useEffect(() => {
+  //   dispatch(
+  //     currentCoordinatesAC({
+  //       lat: info.location?.lat,
+  //       lng: info.location?.lang,
+  //     })
+  //   );
+  // }, [dispatch, info.location?.lat, info.location?.lang]);
 
   return (
     <MapContainer

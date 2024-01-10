@@ -19,8 +19,8 @@ module.exports = {
         rubik: ['"Rubik"', ...defaultTheme.fontFamily.serif],
       },
       screen: {
-        sm: "640px",
-        md: "768px",
+        mobile: "375px",
+        md: "640px",
         lg: "1028px",
       },
     },

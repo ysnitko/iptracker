@@ -4,7 +4,7 @@ import MapComponent from "./components/MapComponent/MapComponent";
 
 function App() {
   return (
-    <div className="font-rubik">
+    <div className="font-rubik h-screen">
       <Header />
       <MapComponent />
     </div>
