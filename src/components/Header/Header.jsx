@@ -1,27 +1,28 @@
 import React, { useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Infobar from '../InfoBar/Infobar';
-import { setCurrenRegiontAC } from '../../redux/actions/currentRegionAC';
+import InfoBar from '../InfoBar/InfoBar';
+import { setCurrentRegionAC } from '../../redux/actions/currentRegionAC';
 import { currentCoordinatesAC } from '../../redux/actions/currentCoordinatesAC';
 import arrow from '../../assets/images/icon-arrow.svg';
 import ip_local from '../../getLocalIp';
+import { ERRORS } from '../../errors';
 
 const Header = () => {
-  const [empty, setEmpty] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const dispatch = useDispatch();
   const info = useSelector((store) => store.currentRegionReducer.info);
-  const ipAdressRef = useRef('');
-
-  const localIp = ip_local();
-  console.log(localIp);
+  const ipAddressRef = useRef('');
+  const validateIpRegex =
+    /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/gm;
 
   const searchInfo = async (address) => {
     const res = await fetch(
       `https://geo.ipify.org/api/v2/country,city?apiKey=at_0jU0rVtiKviW1hSgpjjuwVMfF660F&ipAddress=${address}`
     );
     const data = await res.json();
-    dispatch(setCurrenRegiontAC(data));
+    dispatch(setCurrentRegionAC(data));
     dispatch(
       currentCoordinatesAC({
         lat: data.location?.lat,
@@ -32,14 +33,21 @@ const Header = () => {
 
   const onSubmitForm = async (event) => {
     event.preventDefault();
-    if (!ipAdressRef.current.value) {
-      setEmpty(true);
+    if (!ipAddressRef.current.value) {
+      setIsEmpty(true);
       return;
     } else {
-      setEmpty(false);
+      setIsEmpty(false);
     }
-    await searchInfo(ipAdressRef.current?.value);
-    setIsLoading(true);
+    if (ipAddressRef.current.value.match(validateIpRegex)) {
+      await searchInfo(ipAddressRef.current?.value);
+      setIsLoading(true);
+      setIsError(false);
+    } else {
+      ipAddressRef.current.value = '';
+      setIsError(true);
+      return;
+    }
     console.log(info);
   };
 
@@ -55,17 +63,19 @@ const Header = () => {
       >
         <label htmlFor="search-request" className="w-full block flex">
           <input
-            ref={ipAdressRef}
+            ref={ipAddressRef}
             id="search-request"
             type="text"
             className={
-              empty
-                ? 'w-full rounded-l-2xl p-4 px-8 outline-none text-lg font-bold text-text-info placeholder-red-400'
-                : 'w-full rounded-l-2xl p-4 px-8 outline-none text-lg font-bold text-text-info'
+              isEmpty || isError
+                ? 'w-full rounded-l-2xl p-4 px-8 outline-none text-lg font-medium text-text-info placeholder-red-400'
+                : 'w-full rounded-l-2xl p-4 px-8 outline-none text-lg font-medium text-text-info'
             }
             placeholder={
-              empty
-                ? 'Please enter IP Address'
+              isEmpty
+                ? ERRORS.err_empty_field
+                : isError
+                ? ERRORS.err_ip
                 : 'Search for any IP Address or domain'
             }
             required
@@ -79,7 +89,7 @@ const Header = () => {
           </button>
         </label>
       </form>
-      <Infobar isLoading={isLoading} />
+      <InfoBar isLoading={isLoading} />
     </header>
   );
 };

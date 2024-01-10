@@ -1,6 +1,6 @@
-import { REGION } from "../constants";
+import { REGION } from '../constants';
 
-export const setCurrenRegiontAC = (payload) => {
+export const setCurrentRegionAC = (payload) => {
   return {
     type: REGION,
     payload: payload,
