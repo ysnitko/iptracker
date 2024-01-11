@@ -1,10 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import InfoBar from '../InfoBar/InfoBar';
 import { setCurrentRegionAC } from '../../redux/actions/currentRegionAC';
 import { currentCoordinatesAC } from '../../redux/actions/currentCoordinatesAC';
 import arrow from '../../assets/images/icon-arrow.svg';
-import ip_local from '../../getLocalIp';
 import { ERRORS } from '../../errors';
 
 const Header = () => {
@@ -12,15 +11,42 @@ const Header = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const dispatch = useDispatch();
-  const info = useSelector((store) => store.currentRegionReducer.info);
   const ipAddressRef = useRef('');
   const validateIpRegex =
     /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/gm;
+  const validateDomain =
+    /^(?!-)[A-Za-z0-9-]+([/-/.]{1}[a-z0-9]+)*\.[A-Za-z]{2,6}$/;
+
+  const url =
+    'https://geo.ipify.org/api/v2/country,city?apiKey=at_SlFCRhCHOcFT2vJZr2QAUczIXJtOk';
+
+  useEffect(() => {
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) =>
+        dispatch(
+          currentCoordinatesAC({
+            lat: data.location?.lat,
+            lng: data.location?.lng,
+          })
+        )
+      );
+  }, [dispatch]);
 
   const searchInfo = async (address) => {
-    const res = await fetch(
-      `https://geo.ipify.org/api/v2/country,city?apiKey=at_0jU0rVtiKviW1hSgpjjuwVMfF660F&ipAddress=${address}`
+    const res = await fetch(url + `&ipAddress=${address}`);
+    const data = await res.json();
+    dispatch(setCurrentRegionAC(data));
+    dispatch(
+      currentCoordinatesAC({
+        lat: data.location?.lat,
+        lng: data.location?.lng,
+      })
     );
+  };
+
+  const searchDomain = async (address) => {
+    const res = await fetch(url + `&domain=${address}`);
     const data = await res.json();
     dispatch(setCurrentRegionAC(data));
     dispatch(
@@ -43,12 +69,15 @@ const Header = () => {
       await searchInfo(ipAddressRef.current?.value);
       setIsLoading(true);
       setIsError(false);
+    } else if (ipAddressRef.current.value.match(validateDomain)) {
+      await searchDomain(ipAddressRef.current?.value);
+      setIsLoading(true);
+      setIsError(false);
     } else {
       ipAddressRef.current.value = '';
       setIsError(true);
       return;
     }
-    console.log(info);
   };
 
   return (
