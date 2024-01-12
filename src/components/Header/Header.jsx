@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import InfoBar from '../InfoBar/InfoBar';
 import { setCurrentRegionAC } from '../../redux/actions/currentRegionAC';
 import { currentCoordinatesAC } from '../../redux/actions/currentCoordinatesAC';
+import { ERRORS } from '../../redux/constants';
 import arrow from '../../assets/images/icon-arrow.svg';
-import { ERRORS } from '../../errors';
 
-const Header = () => {
+const Header = ({ setIsLoading }) => {
   const [isEmpty, setIsEmpty] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isData, setIsData] = useState(false);
   const dispatch = useDispatch();
   const ipAddressRef = useRef('');
   const validateIpRegex =
@@ -18,7 +18,7 @@ const Header = () => {
     /^(?!-)[A-Za-z0-9-]+([/-/.]{1}[a-z0-9]+)*\.[A-Za-z]{2,6}$/;
 
   const url =
-    'https://geo.ipify.org/api/v2/country,city?apiKey=at_SlFCRhCHOcFT2vJZr2QAUczIXJtOk';
+    'https://geo.ipify.org/api/v2/country,city?apiKey=at_e77f4OLoZl1Qy9HTfLnqFjyB5HjUq';
 
   useEffect(() => {
     fetch(url)
@@ -34,6 +34,7 @@ const Header = () => {
   }, [dispatch]);
 
   const searchInfo = async (address) => {
+    setIsLoading(true);
     const res = await fetch(url + `&ipAddress=${address}`);
     const data = await res.json();
     dispatch(setCurrentRegionAC(data));
@@ -43,10 +44,12 @@ const Header = () => {
         lng: data.location?.lng,
       })
     );
+    setIsLoading(false);
   };
 
-  const searchDomain = async (address) => {
-    const res = await fetch(url + `&domain=${address}`);
+  const searchDomain = async (domain) => {
+    setIsLoading(true);
+    const res = await fetch(url + `&domain=${domain}`);
     const data = await res.json();
     dispatch(setCurrentRegionAC(data));
     dispatch(
@@ -55,27 +58,27 @@ const Header = () => {
         lng: data.location?.lng,
       })
     );
+    setIsLoading(false);
   };
 
   const onSubmitForm = async (event) => {
     event.preventDefault();
+
     if (!ipAddressRef.current.value) {
       setIsEmpty(true);
       return;
-    } else {
-      setIsEmpty(false);
-    }
+    } else setIsEmpty(false);
     if (ipAddressRef.current.value.match(validateIpRegex)) {
-      await searchInfo(ipAddressRef.current?.value);
-      setIsLoading(true);
+      await searchInfo(ipAddressRef.current.value);
       setIsError(false);
+      setIsData(true);
     } else if (ipAddressRef.current.value.match(validateDomain)) {
       await searchDomain(ipAddressRef.current?.value);
-      setIsLoading(true);
       setIsError(false);
     } else {
       ipAddressRef.current.value = '';
       setIsError(true);
+      setIsData(false);
       return;
     }
   };
@@ -90,7 +93,7 @@ const Header = () => {
         className="m-auto my-0 w-2/5 max-[640px]:w-3/4"
         onSubmit={onSubmitForm}
       >
-        <label htmlFor="search-request" className="w-full block flex">
+        <label htmlFor="search-request" className="w-full flex">
           <input
             ref={ipAddressRef}
             id="search-request"
@@ -118,7 +121,7 @@ const Header = () => {
           </button>
         </label>
       </form>
-      <InfoBar isLoading={isLoading} />
+      <InfoBar isData={isData} />
     </header>
   );
 };
