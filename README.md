@@ -22,7 +22,7 @@ Create a directory in which the project will be located.
 
 Using a terminal launched from your development environment, go to the created directory and execute the command git clone https://github.com/ysnitko/iptracker.git.
 
-Run the command in the terminal: cd Rock-Paper-Scissors-game-react-.
+Run the command in the terminal: cd iptracker.
 
 To download the necessary libraries used in the project, run the command in the terminal npm i.
 
