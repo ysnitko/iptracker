@@ -12,8 +12,6 @@ This is a solution to the [IP address tracker challenge on Frontend Mentor](http
   - [Built with](#built-with)
   - [Useful resources](#useful-resources)
 
-**Note: Delete this note and update the table of contents based on what sections you keep.**
-
 ## Overview
 
 ### How to start
