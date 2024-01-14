@@ -5,42 +5,56 @@ This is a solution to the [IP address tracker challenge on Frontend Mentor](http
 ## Table of contents
 
 - [Overview](#overview)
-  - [The challenge](#the-challenge)
+  - [How to start](#how-to-start)
+  - [Features](#features)
   - [Screenshot](#screenshot)
   - [Links](#links)
-- [My process](#my-process)
   - [Built with](#built-with)
-  - [What I learned](#what-i-learned)
-  - [Continued development](#continued-development)
   - [Useful resources](#useful-resources)
 
 **Note: Delete this note and update the table of contents based on what sections you keep.**
 
 ## Overview
 
-### The challenge
+### How to start
+
+Create a directory in which the project will be located.
+
+Using a terminal launched from your development environment, go to the created directory and execute the command git clone https://github.com/ysnitko/iptracker.git.
+
+Run the command in the terminal: cd Rock-Paper-Scissors-game-react-.
+
+To download the necessary libraries used in the project, run the command in the terminal npm i.
+
+After downloading the libraries and dependencies, we start building the project using the command npm run start.
+
+The project will launch automatically in the browser or will be available at http://localhost:3000.
+
+### Features
 
 Users should be able to:
 
 - View the optimal layout for each page depending on their device's screen size
 - See their own IP address on the map on the initial page load
 - Search for any IP addresses or domains and see the key information and location
+- Bootloader animation is displayed during the boot process
+- In case of errors, the error text is displayed
 
 ### Screenshot
 
-![IP TRACKER](https://github.com/WassimZo/Ip-Tracker/blob/master/public/images/Screenshot.png)
+![IP TRACKER](https://github.com/ysnitko/iptracker/blob/main/src/assets/images/Screenshot_1.png)
+![IP TRACKER](https://github.com/ysnitko/iptracker/blob/main/src/assets/images/Screenshot_2.png)
+![IP TRACKER](https://github.com/ysnitko/iptracker/blob/main/src/assets/images/Screenshot_3.png)
 
 ### Links
 
-- Solution URL: [https://github.com/WassimZo/Ip-Tracker](https://github.com/WassimZo/Ip-Tracker)
-- Live Site URL: [https://ip-tracker-wass.vercel.app/](https://ip-tracker-wass.vercel.app/)
+- Source code: [https://github.com/ysnitko/iptracker](https://github.com/ysnitko/iptracker)
+- Live Site URL: [https://iptracker-app-react.netlify.app/](https://iptracker-app-react.netlify.app/)
 
 ### Built with
 
-- [Vite](https://vitejs.dev/) - Dev Server
 - [React](https://reactjs.org/) - JS library
 - [TailwindCSS](https://tailwindcss.com/) - For styles
-- Mobile-first workflow
 
 ### Useful resources
 
