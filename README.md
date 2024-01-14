@@ -18,17 +18,17 @@ This is a solution to the [IP address tracker challenge on Frontend Mentor](http
 
 ### How to start
 
-Create a directory in which the project will be located.
+1. Create a directory in which the project will be located.
 
-Using a terminal launched from your development environment, go to the created directory and execute the command git clone https://github.com/ysnitko/iptracker.git.
+2. Using a terminal launched from your development environment, go to the created directory and execute the command git clone https://github.com/ysnitko/iptracker.git.
 
-Run the command in the terminal: cd iptracker.
+3. Run the command in the terminal: cd iptracker.
 
-To download the necessary libraries used in the project, run the command in the terminal npm i.
+4. To download the necessary libraries used in the project, run the command in the terminal npm i.
 
-After downloading the libraries and dependencies, we start building the project using the command npm run start.
+5. After downloading the libraries and dependencies, we start building the project using the command npm run start.
 
-The project will launch automatically in the browser or will be available at http://localhost:3000.
+6. The project will launch automatically in the browser or will be available at http://localhost:3000.
 
 ### Features
 
