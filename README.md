@@ -35,7 +35,7 @@ The project will launch automatically in the browser or will be available at htt
 Users should be able to:
 
 - View the optimal layout for each page depending on their device's screen size
-- See their own IP address on the map on the initial page load
+- See their own location on the map on the initial page load
 - Search for any IP addresses or domains and see the key information and location
 - Bootloader animation is displayed during the boot process
 - In case of errors, the error text is displayed
