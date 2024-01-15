@@ -40,9 +40,9 @@ Users should be able to:
 
 ### Screenshot
 
-![IP TRACKER](https://github.com/ysnitko/iptracker/blob/main/src/assets/images/Screenshot_1.png)
-![IP TRACKER](https://github.com/ysnitko/iptracker/blob/main/src/assets/images/Screenshot_2.png)
-![IP TRACKER](https://github.com/ysnitko/iptracker/blob/main/src/assets/images/Screenshot_3.png)
+![ScreenShot](https://github.com/ysnitko/iptracker/blob/main/src/assets/images/Screenshot_1.png)
+![ScreenShot](https://github.com/ysnitko/iptracker/blob/main/src/assets/images/Screenshot_2.png)
+![ScreenShot](https://github.com/ysnitko/iptracker/blob/main/src/assets/images/Screenshot_3.png)
 
 ### Links
 
